@@ -1,26 +1,35 @@
 ﻿using System;
+using System.Numerics;
+using System.Security.Cryptography;
+using System.Threading;
 
 namespace Command
 {
     interface ICommand
     {
-        void Positive();
+        void Execute();
         void Negative();
     }
 
     class Conveyor
     {
+        public float powerStep = 5f;
+        public float tempCurrentPower = default;
         public void On() => Console.WriteLine("Конвейер запущен");
-        public void Off() => Console.WriteLine("Конвейер остановлен");
-        public void SpeedIncrease() => Console.WriteLine("Увеличена скорость конвейера");
-        public void SpeedDecrease() => Console.WriteLine("Снижена скорость конвейера");
+        public void Off()
+        {
+            tempCurrentPower = default;
+            Console.WriteLine("Конвейер остановлен");
+        }
+        public void SpeedIncrease() => Console.WriteLine("Увеличена скорость конвейера на " + powerStep + "%");
+        public void SpeedDecrease() => Console.WriteLine("Снижена скорость конвейера на " + powerStep + "%");
     }
 
     class ConveyorWorkCommand : ICommand
     {
         private Conveyor _conveyor;
         public ConveyorWorkCommand(Conveyor conveyor) => this._conveyor = conveyor;
-        public void Positive() => _conveyor.On();
+        public void Execute() => _conveyor.On();
         public void Negative() => _conveyor.Off();
     }
 
@@ -28,29 +37,34 @@ namespace Command
     {
         private Conveyor _conveyor;
         public ConveyerAjustCommand(Conveyor conveyor) => this._conveyor = conveyor;
-        public void Positive() => _conveyor.SpeedIncrease();
+        public void Execute()
+        {
+            _conveyor.tempCurrentPower += _conveyor.powerStep;
+            _conveyor.SpeedIncrease();
+        }
         public void Negative() => _conveyor.SpeedDecrease();
 
     }
 
     class Multypult
     {
-        private List<ICommand> commands;
+        public List<ICommand> commands;
         private Stack<ICommand> history;
         public Multypult()
         {
-            commands = new List<ICommand> { null, null };
+            commands = new List<ICommand>();
             history = new Stack<ICommand>();
         }
 
         public void SetCommand(int button, ICommand commmand)
         {
+            commands.Add(item: null);
             commands[button] = commmand;
         }
 
         public void PressOn(int button)
         {
-            commands[button].Positive();
+            commands[button].Execute();
             history.Push(commands[button]);
         }
 
@@ -65,18 +79,29 @@ namespace Command
 
     class Program
     {
+        public static readonly float nominalPower = 20f;
         static void Main(string[] args)
         {
             Conveyor conveyor = new();
             Multypult multypult = new();
 
+            int countOfIterations = 0;
             multypult.SetCommand(0, new ConveyorWorkCommand(conveyor));
-            multypult.SetCommand(1, new ConveyerAjustCommand(conveyor));
+            multypult.PressOn(countOfIterations);
+            Thread.Sleep(1000);
+            while (conveyor.tempCurrentPower < nominalPower)
+            {
+                multypult.SetCommand(countOfIterations, new ConveyerAjustCommand(conveyor));
+                Thread.Sleep(1000);
+                multypult.PressOn(countOfIterations++);
+            }
 
-            multypult.PressOn(0);
-            multypult.PressOn(1);
-            multypult.PressCancel();
-            multypult.PressCancel();
+            Console.WriteLine("Nominal power");
+            Console.WriteLine("is working");
+            Thread.Sleep(3000);
+
+
+
         }
     }
 }
