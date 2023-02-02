@@ -24,10 +24,6 @@ public interface IPaintingStyle
 
 public class WebPicture : Picture, IPaintingStyle
 {
-    public new string Name;
-    public new int Width;
-    public new int Height; 
-
     public WebPicture(string name, int width, int height) : base(name, width, height)
     {
         Name = name; Width = width; Height = height;
@@ -42,10 +38,6 @@ public class WebPicture : Picture, IPaintingStyle
 
 public class DesktopPicture : Picture, IPaintingStyle
 {
-    public new string Name;
-    public new int Width;
-    public new int Height; 
-
     public DesktopPicture(string name, int width, int height) : base(name, width, height)
     {
         Name = name; Width = width; Height = height;
@@ -97,13 +89,13 @@ class Program
 {
     static void Main(string[] args)
     {
+        // сеньёру необходимо дать точное ТЗ
         SeniorDesigner seniorDesigner = new("Victor");
         Picture picture = (DesktopPicture)seniorDesigner.DrawPicture(new DesktopPicture("Sun", 600, 800));
 
+        // профильный работник и так знает что делать
         PixelDesigner pixelDesigner = new("Mark");
         Picture pixelPicture = pixelDesigner.DrawPicture("Cloud", 1080, 1920);
-        
-
     }
 }
 
