@@ -102,9 +102,7 @@ class Program
 
         PixelDesigner pixelDesigner = new("Mark");
         Picture pixelPicture = pixelDesigner.DrawPicture("Cloud", 1080, 1920);
-       
-
-
+        
 
     }
 }
