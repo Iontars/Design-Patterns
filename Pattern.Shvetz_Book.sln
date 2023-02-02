@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Command", "Command\Command.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{6D71A52B-7CA2-4C98-B5AE-B5B3D3EA7DC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrueFactoryMethod", "TrueFactoryMethod\TrueFactoryMethod.csproj", "{505C8482-05AE-47D9-994B-C9E59921EF32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrueFactoryMethod_2", "TrueFactoryMethod_2\TrueFactoryMethod_2.csproj", "{2DF8225E-FCFD-4B3D-8B8C-D5B62EF6DD50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{6D71A52B-7CA2-4C98-B5AE-B5B3D3EA7DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D71A52B-7CA2-4C98-B5AE-B5B3D3EA7DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D71A52B-7CA2-4C98-B5AE-B5B3D3EA7DC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{505C8482-05AE-47D9-994B-C9E59921EF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{505C8482-05AE-47D9-994B-C9E59921EF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{505C8482-05AE-47D9-994B-C9E59921EF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{505C8482-05AE-47D9-994B-C9E59921EF32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF8225E-FCFD-4B3D-8B8C-D5B62EF6DD50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF8225E-FCFD-4B3D-8B8C-D5B62EF6DD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF8225E-FCFD-4B3D-8B8C-D5B62EF6DD50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF8225E-FCFD-4B3D-8B8C-D5B62EF6DD50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
