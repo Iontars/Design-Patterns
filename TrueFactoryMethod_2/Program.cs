@@ -4,19 +4,19 @@ namespace TrueFactoryMethod_2;
 
 public class EmployeeData
 {
-    Employee employee_1 = new(1,"Mark"); 
-    Employee employee_2 = new(2,"Marry"); 
-    Employee employee_3 = new(3,"Denis"); 
-
     public static List<Employee> pixelDesignerList= new List<Employee>();
     public static List<Employee> VectorDesignerList= new List<Employee>();
     public static List<Employee> TeamLeads = new List<Employee>();
 
     public void FillDataList()
     {
-        pixelDesignerList.Add(employee_1);
-        VectorDesignerList.Add(employee_2);
-        TeamLeads.Add(employee_3);
+        pixelDesignerList.Add(new(1, "Mark"));
+        pixelDesignerList.Add(new(2, "Frank"));
+
+        VectorDesignerList.Add(new(3, "Marry"));
+        VectorDesignerList.Add(new(4, "Ann"));
+
+        TeamLeads.Add(new(5, "Denis"));
     }
 }
 
@@ -70,8 +70,7 @@ public class WebPicture : Picture, IPaintingStyle
     {
         Name = name; Width = width; Height = height;
         Designer = new VectorDesigner();
-        Designer.Name = new VectorDesigner().Name;
-        Draw();
+        //Draw();
     }
     public override string DrawedBy() => "Векторная графика";
 }
@@ -82,9 +81,7 @@ public class DesktopPicture : Picture, IPaintingStyle
     {
         Name = name; Width = width; Height = height;
         Designer = new PixelDesigner();
-        Designer.Name = new PixelDesigner().Name;
-        //Designer.ToolName = new PixelDesigner().ToolName;
-        Draw();
+        //Draw();
     }
     public override string DrawedBy() => "Пиксельная графика";  
 }
@@ -105,7 +102,7 @@ public class PixelDesigner : Designer, IDesignerInfo
     public PixelDesigner()
     {
         ToolName = ShowToolBox();
-        Name = EmployeeData.pixelDesignerList[0].Name;
+        Name = EmployeeData.pixelDesignerList[new Random().Next(0,2)].Name;
     }
     public WebPicture DrawPicture(string name, int width, int height) => new WebPicture(name, width, height);  
 }
@@ -117,7 +114,7 @@ public class VectorDesigner : Designer, IDesignerInfo
     public VectorDesigner()
     {
         ToolName = ShowToolBox();
-        Name = EmployeeData.VectorDesignerList[0].Name; ;
+        Name = EmployeeData.VectorDesignerList[new Random().Next(0, 2)].Name; ;
     }
     public DesktopPicture DrawPicture(string name, int width, int height) => new DesktopPicture(name, width, height);
 }
@@ -137,9 +134,13 @@ class Program
         employeeData.FillDataList();
 
         PixelDesigner pixelDesigner = new();
-        Picture samePixelPicture = pixelDesigner.DrawPicture("Sun", 600, 800);
+        IPaintingStyle samePixelPicture = pixelDesigner.DrawPicture("Sun", 600, 800);
         VectorDesigner vectorlDesigner = new();
-        Picture vectorPicture = vectorlDesigner.DrawPicture("Moon", 256, 256);
+        IPaintingStyle vectorPicture = vectorlDesigner.DrawPicture("Moon", 256, 256);
+        samePixelPicture.Draw();
+        vectorPicture.Draw();
+
+
     }
 }
 
