@@ -2,82 +2,78 @@
 
 public abstract class Picture : IPaintingStyle
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
+    public string ToolName { get; set; }
 
-    public Picture(string name, int width, int height)
+    public Picture() 
+    {
+
+    }
+    public Picture(string name, int width, int height) : this()
     {
         Name = name;
         Width = width;
         Height = height;
     }
-
-    public abstract void Draw();
+    public string DrawBy() => ToolName;
+    public void Draw()
+    {
+        Console.WriteLine($" {Name}: {Width}x{Height} использована {DrawBy()}");
+    }
 }
 
 public interface IPaintingStyle
 {
-    //public string DrawBy();
+    public string ToolName { get;}
+    public string DrawBy();
     public void Draw();
 }
 
 public class WebPicture : Picture, IPaintingStyle
 {
+    new string ToolName => "Пиксельная графика";
+    public WebPicture() { }
     public WebPicture(string name, int width, int height) : base(name, width, height)
     {
         Name = name; Width = width; Height = height;
         Draw();
     }
-    //public string DrawBy() => "Векторная графика";
-    public override void Draw()
-    {
-        Console.WriteLine(Name + " " + Width + "x" + Height);
-    }
+    public new string DrawBy() => ToolName;
+    
 }
 
 public class DesktopPicture : Picture, IPaintingStyle
 {
+    new string ToolName => "Пиксельная графика";
+    public DesktopPicture() { }
     public DesktopPicture(string name, int width, int height) : base(name, width, height)
     {
         Name = name; Width = width; Height = height;
         Draw();
     }
-    //public string DrawBy() => "Пиксельная графика";
-    public override void Draw()
-    {
-        Console.WriteLine(Name + " " + Width +"x" + Height);
-    }
+    public new string DrawBy() => ToolName;
+    
 }
 
 public class SeniorDesigner : IDesignerToolBox
 {
     public string Name { get; set;}
     public string ShowToolBox() => "Использует все инструменты";
-    public SeniorDesigner(string name)
-    {
-        Name = name;
-    }
+    public SeniorDesigner(string name) => Name = name;
 
-    public IPaintingStyle DrawPicture(IPaintingStyle paintingStyle)
-    {
-        return paintingStyle;
-    }
+    public IPaintingStyle DrawPicture(IPaintingStyle paintingStyle) => paintingStyle; // статический полиморфизм
 }
 
 public class PixelDesigner : SeniorDesigner, IDesignerToolBox
 {
     public new string Name { get; set; }
     public new string ShowToolBox() => "Использует Photoshop";
-    public PixelDesigner(string name) : base(name)
-    {
-        Name = name;
-    }
+    public PixelDesigner(string name) : base(name) => Name = name;
 
-    public DesktopPicture DrawPicture(string name, int width, int height)
-    {
-        return new DesktopPicture(name, width, height);
-    }
+    public DesktopPicture DrawPicture(string name, int width, int height) => new DesktopPicture(name, width, height);
+    
 }
 
 interface IDesignerToolBox
@@ -96,6 +92,9 @@ class Program
         // профильный работник и так знает что делать
         PixelDesigner pixelDesigner = new("Mark");
         Picture pixelPicture = pixelDesigner.DrawPicture("Cloud", 1080, 1920);
+
+        Picture picture1 = new DesktopPicture();
+
     }
 }
 
