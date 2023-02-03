@@ -2,81 +2,82 @@
 
 public abstract class Picture : IPaintingStyle
 {
+    SeniorDesigner designer = new();
+
     public string? Name { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
-    public string ToolName { get; set; }
 
-    public Picture() 
-    {
-
-    }
-    public Picture(string name, int width, int height) : this()
+    public Picture(string name, int width, int height)
     {
         Name = name;
         Width = width;
         Height = height;
     }
-    public string DrawBy() => ToolName;
+    public abstract string DrawedBy();
     public void Draw()
     {
-        Console.WriteLine($" {Name}: {Width}x{Height} использована {DrawBy()}");
+        Console.WriteLine($" {Name}: {Width}x{Height} использована {DrawedBy()}");
     }
 }
 
-public interface IPaintingStyle
+public interface IPaintingStyle 
 {
-    public string ToolName { get;}
-    public string DrawBy();
+    // в данной примере методы интерфейса можно безболезненно удалить,
+    // так как реализации прописаны в абстрактнном классе Picture
+    // данном примере интефейс выполняет функцию котнракта, обязывающего абстрактный класс иметь в себе реализации методов интерфейса
+    // однако удалив методы из данного интерфейса мы не сможем вызвать эти методы, через объект интерфейса Например:
+    // IPaintingStyle desktopPicture = new DesktopPicture("Star", 480, 640); desktopPicture.DrawedBy();
+    // картина всё равно будет нарисована благодаря абстрактному классу но узнать инструмент используимый для рисования, не выйдет, метод DrawedBy(); не будет доступен
+    public abstract string DrawedBy();
     public void Draw();
 }
 
 public class WebPicture : Picture, IPaintingStyle
 {
-    new string ToolName => "Пиксельная графика";
-    public WebPicture() { }
     public WebPicture(string name, int width, int height) : base(name, width, height)
     {
         Name = name; Width = width; Height = height;
         Draw();
     }
-    public new string DrawBy() => ToolName;
-    
+    public override string DrawedBy() => "Векторная графика";
 }
 
 public class DesktopPicture : Picture, IPaintingStyle
 {
-    new string ToolName => "Пиксельная графика";
-    public DesktopPicture() { }
     public DesktopPicture(string name, int width, int height) : base(name, width, height)
     {
         Name = name; Width = width; Height = height;
         Draw();
     }
-    public new string DrawBy() => ToolName;
-    
+    public override string DrawedBy() => "Пиксельная графика";  
 }
 
-public class SeniorDesigner : IDesignerToolBox
+public class SeniorDesigner : IDesignerInfo
 {
     public string Name { get; set;}
     public string ShowToolBox() => "Использует все инструменты";
     public SeniorDesigner(string name) => Name = name;
-
     public IPaintingStyle DrawPicture(IPaintingStyle paintingStyle) => paintingStyle; // статический полиморфизм
 }
 
-public class PixelDesigner : SeniorDesigner, IDesignerToolBox
+public class PixelDesigner : SeniorDesigner, IDesignerInfo
 {
     public new string Name { get; set; }
     public new string ShowToolBox() => "Использует Photoshop";
     public PixelDesigner(string name) : base(name) => Name = name;
-
-    public DesktopPicture DrawPicture(string name, int width, int height) => new DesktopPicture(name, width, height);
-    
+    public WebPicture DrawPicture(string name, int width, int height) => new WebPicture(name, width, height);  
 }
 
-interface IDesignerToolBox
+public class VectorDesigner : SeniorDesigner, IDesignerInfo
+{
+    public new string Name { get; set; }
+    public new string ShowToolBox() => "Использует Illustrator";
+    public VectorDesigner(string name) : base(name) => Name = name;
+    public DesktopPicture DrawPicture(string name, int width, int height) => new DesktopPicture(name, width, height);
+}
+
+interface IDesignerInfo
 {
     public string ShowToolBox();
 }
@@ -87,13 +88,13 @@ class Program
     {
         // сеньёру необходимо дать точное ТЗ
         SeniorDesigner seniorDesigner = new("Victor");
-        Picture picture = (DesktopPicture)seniorDesigner.DrawPicture(new DesktopPicture("Sun", 600, 800));
+        Picture pixelPicture = (DesktopPicture)seniorDesigner.DrawPicture(new DesktopPicture("Sun", 600, 800));
+        SeniorDesigner seniorDesignerV2 = new("Marry");
+        Picture vectorPicture = (WebPicture)seniorDesignerV2.DrawPicture(new WebPicture("Moon", 256, 256)); 
 
         // профильный работник и так знает что делать
         PixelDesigner pixelDesigner = new("Mark");
-        Picture pixelPicture = pixelDesigner.DrawPicture("Cloud", 1080, 1920);
-
-        Picture picture1 = new DesktopPicture();
+        Picture samePixelPicture = pixelDesigner.DrawPicture("Cloud", 1080, 1920);
 
     }
 }
