@@ -95,7 +95,6 @@ namespace Command
         public void Delay(float value) => Thread.Sleep((int)(value * 1000));
     }
     
-
     class Program
     {
         static int nominalPower;
@@ -111,14 +110,14 @@ namespace Command
 
             do
             {
-                Console.WriteLine("Задайте мощность конвейера");
+                Console.WriteLine("Задайте мощность конвейера ( в int максимально 100)");
                 Int32.TryParse((Console.ReadLine()), out nominalPower);
             }
             while (nominalPower <= uint.MinValue || nominalPower > _nominalPower_MAX);
 
             do
             {
-                Console.WriteLine("Задайте объём работ");
+                Console.WriteLine("Задайте объём работ ( для наглядности примерно 500) ");
                 Int32.TryParse((Console.ReadLine()), out scopeWork);
             }
             while (scopeWork <= uint.MinValue || scopeWork > _scopeWork_MAX);

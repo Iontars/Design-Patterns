@@ -34,7 +34,8 @@ public class Employee
 
 public abstract class Picture : IPaintingStyle
 {
-    public IDesignerInfo? Designer { get; set; }
+    public IDesignerInfo? Designer { get; set; } // ассоциация 
+
     public string Name { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
@@ -52,6 +53,7 @@ public abstract class Picture : IPaintingStyle
     }
 }
 
+// проектирование на уровне абстракции
 public interface IPaintingStyle 
 {
     // в данной примере методы интерфейса можно безболезненно удалить,
@@ -63,7 +65,7 @@ public interface IPaintingStyle
     public abstract string DrawedBy();
     public void Draw();
 }
-
+// Наследование 
 public class WebPicture : Picture, IPaintingStyle
 {  
     public WebPicture(string name, int width, int height) : base(name, width, height)
@@ -92,7 +94,7 @@ abstract public class Designer // может быть и не абстрактн
     public string? ToolName { get; set; }
     public Designer(string name) => Name = name;
     public Designer() { }
-    public IPaintingStyle DrawPicture(IPaintingStyle paintingStyle) => paintingStyle; 
+    public IPaintingStyle DrawPicture(IPaintingStyle paintingStyle) => paintingStyle; // агрегация
 }
 
 public class PixelDesigner : Designer, IDesignerInfo
@@ -118,7 +120,7 @@ public class VectorDesigner : Designer, IDesignerInfo
     }
     public DesktopPicture DrawPicture(string name, int width, int height) => new DesktopPicture(name, width, height);
 }
-
+// проектирование на уровне абстракции
 public interface IDesignerInfo
 {
     public string? Name { get; set;}
@@ -134,13 +136,11 @@ class Program
         employeeData.FillDataList();
 
         PixelDesigner pixelDesigner = new();
-        IPaintingStyle samePixelPicture = pixelDesigner.DrawPicture("Sun", 600, 800);
+        IPaintingStyle samePixelPicture = pixelDesigner.DrawPicture("Sun", 600, 800); // параметрический Апкаст плиморфизм
         VectorDesigner vectorlDesigner = new();
         IPaintingStyle vectorPicture = vectorlDesigner.DrawPicture("Moon", 256, 256);
         samePixelPicture.Draw();
         vectorPicture.Draw();
-
-
     }
 }
 
