@@ -33,7 +33,7 @@ namespace Command
         }
     }
 
-    class ConveyorWorkCommand : ICommand
+    internal class ConveyorWorkCommand : ICommand
     {
         private Conveyor _conveyor;
         public ConveyorWorkCommand(Conveyor conveyor) => this._conveyor = conveyor;
@@ -53,11 +53,11 @@ namespace Command
 
     }
 
-    class Multypult
+    class Multipult
     {
         public List<ICommand> commands;
         public Stack<ICommand> history;
-        public Multypult()
+        public Multipult()
         {
             commands = new List<ICommand>();
             history = new Stack<ICommand>();
@@ -90,13 +90,13 @@ namespace Command
         }
     }
 
-    class DelayClass
+    internal class DelayClass
     {
         public void Delay(float value) => Thread.Sleep((int)(value * 1000));
     }
-    
 
-    class Program
+
+    static class Program
     {
         static int nominalPower;
         static int scopeWork;
@@ -106,7 +106,7 @@ namespace Command
         static void Main(string[] args)
         {
             Conveyor conveyor = new();
-            Multypult multypult = new();
+            Multipult multipult = new();
             DelayClass delayClass = new();
 
             do
@@ -126,14 +126,14 @@ namespace Command
             Console.WriteLine("Установлена мощность конвейера: " + nominalPower);
 
             int countOfIterations = 0;
-            multypult.SetCommand(countOfIterations, new ConveyorWorkCommand(conveyor));
-            multypult.PressOn(countOfIterations);
+            multipult.SetCommand(countOfIterations, new ConveyorWorkCommand(conveyor));
+            multipult.PressOn(countOfIterations);
             delayClass.Delay(1);
             while (conveyor.tempCurrentPower < nominalPower)
             {
-                multypult.SetCommand(countOfIterations, new ConveyerAjustCommand(conveyor));
+                multipult.SetCommand(countOfIterations, new ConveyerAjustCommand(conveyor));
                 delayClass.Delay(1);
-                multypult.PressOn(countOfIterations++);
+                multipult.PressOn(countOfIterations++);
             }
 
             Console.WriteLine("Мощность достигнута");
@@ -161,18 +161,18 @@ namespace Command
 
             while (conveyor.tempCurrentPower > 0)
             {
-                multypult.SetCommand(countOfIterations, new ConveyerAjustCommand(conveyor));
+                multipult.SetCommand(countOfIterations, new ConveyerAjustCommand(conveyor));
                 delayClass.Delay(1);
-                multypult.PressOff(countOfIterations++);
+                multipult.PressOff(countOfIterations++);
             }
 
-            multypult.SetCommand(countOfIterations, new ConveyorWorkCommand(conveyor));
+            multipult.SetCommand(countOfIterations, new ConveyorWorkCommand(conveyor));
             delayClass.Delay(1);
-            multypult.PressOff(countOfIterations);
+            multipult.PressOff(countOfIterations);
 
-            multypult.commands.Clear();
-            Console.WriteLine("Очередь задач очищена: " + multypult.commands.Count);
-            Console.WriteLine("История задач составляет: " + multypult.history.Count);
+            multipult.commands.Clear();
+            Console.WriteLine("Очередь задач очищена: " + multipult.commands.Count);
+            Console.WriteLine("История задач составляет: " + multipult.history.Count);
         }
     }
 }
